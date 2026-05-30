@@ -56,3 +56,7 @@ These scripts now use `pathlib.Path(__file__).resolve().parent` so they can run 
 - Run `npm install` only from inside the `POC-45---attention-economy-revenue-simulator---Jaliba-sherin-kj` folder.
 - Do not rely on any `package-lock.json` located outside this directory.
 - If you add Python packages, update `requirements.txt` accordingly.
+
+
+
+@pallaviprasadt
