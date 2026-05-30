@@ -1,0 +1,2 @@
+# No third-party Python packages are required for the included utility scripts.
+# These scripts use only Python standard library modules.
