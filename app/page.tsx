@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import styles from "./page.module.css";
 
-/* ─────────────────────────── DATA ─────────────── */
+/* ─────────────────────────── DATA ─────────────────────────── */
 const PLATFORMS = [
   { id: "youtube", name: "YouTube", icon: "▶️", category: "Video", dau: 122, session: 40, adLoad: 12, cpm: 7.5, creatorSplit: 55, color: "#f43f5e" },
   { id: "tiktok", name: "TikTok", icon: "🎵", category: "Short Video", dau: 150, session: 95, adLoad: 8, cpm: 3.5, creatorSplit: 20, color: "#06b6d4" },
@@ -22,9 +22,11 @@ const VERTICAL_CPMS = [
   { label: "Entertainment", value: 4 },
 ];
 
-/* ─────────────────────────── COMPONENT ─────────────── */
+/* ─────────────────────────── COMPONENT ─────────────────────────── */
 export default function AttentionEconomyDashboard() {
   const [selectedId, setSelectedId] = useState("youtube");
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [infoOpen, setInfoOpen] = useState(false);
   const activePlatform = PLATFORMS.find((p) => p.id === selectedId) || PLATFORMS[0];
 
   const [simDau, setSimDau] = useState(activePlatform.dau);
@@ -46,7 +48,7 @@ export default function AttentionEconomyDashboard() {
   const simCreatorRev = simDailyRev * (activePlatform.creatorSplit / 100);
   const simPlatformNet = simDailyRev - simCreatorRev;
 
-  // Global aggregate metrics (static reference based on initial array)
+  // Global aggregate metrics
   const globalDau = PLATFORMS.reduce((acc, p) => acc + p.dau, 0) / 1000; // in Billions
   const avgCpm = PLATFORMS.reduce((acc, p) => acc + p.cpm, 0) / PLATFORMS.length;
   const avgSession = PLATFORMS.reduce((acc, p) => acc + p.session, 0) / PLATFORMS.length;
@@ -56,21 +58,38 @@ export default function AttentionEconomyDashboard() {
     return acc + (imps / 1000) * p.cpm;
   }, 0);
 
+  // Helper handler for clickable intelligence logic
+  const handlePlatformSelect = (id: string) => {
+    setSelectedId(id);
+    setPanelOpen(true);
+  };
+
   return (
     <div className={styles.root}>
-      {/* HEADER */}
+      {/* MINIMALIST TRANSPARENT HEADER */}
       <header className={styles.header}>
         <div className={styles.headerInner}>
           <div className={styles.headerBrand}>
-            <div className={styles.headerLogo}>⏱️</div>
+            <div className={styles.headerLogo}>⚡</div>
             <div>
-              <div className={styles.headerTitle}>Attention Economy Revenue Simulator</div>
-              <div className={styles.headerSub}>REAL RAILS INTELLIGENCE LIBRARY · POC-45</div>
+              {/* FIXED: Replaced heading and sub-heading per mentor concept brief */}
+              <div className={styles.headerTitle} style={{ letterSpacing: "2px", fontWeight: "800" }}>INFOCREON</div>
+              <div className={styles.headerSub}>DYNAMIC INTELLIGENCE INTERFACE · LEAD ARCHITECT PROTOTYPE</div>
             </div>
           </div>
-          <div className={styles.headerBadge}>
-            <div className={styles.liveDot}></div>
-            LIVE
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <button 
+              className={styles.headerInfoIcon}
+              onClick={() => setInfoOpen(true)}
+              title="Developer Info"
+              style={{ background: "transparent", border: "none", fontSize: "20px", cursor: "pointer" }}
+            >
+              ℹ️
+            </button>
+            <div className={styles.headerBadge}>
+              <div className={styles.liveDot}></div>
+              SECURE
+            </div>
           </div>
         </div>
       </header>
@@ -93,7 +112,6 @@ export default function AttentionEconomyDashboard() {
             <span className={styles.tickerItem}>CPM range: $0.50 - $52 by vertical</span>
             <span className={styles.tickerDot}>•</span>
             <span className={styles.tickerItem}>Creator economy market: $250B</span>
-            {/* Duplicated for infinite scroll effect */}
             <span className={styles.tickerDot}>•</span>
             <span className={styles.tickerItem}>Global ad spend 2024: $740B</span>
             <span className={styles.tickerDot}>•</span>
@@ -106,46 +124,50 @@ export default function AttentionEconomyDashboard() {
       <section className={styles.kpiSection}>
         <div className={styles.kpiCard}>
           <div className={styles.kpiLabel}>COMBINED DAILY AD REVENUE</div>
-          <div className={styles.kpiValue} style={{ color: "#3b82f6" }}>${(totalRev / 1e6).toFixed(1)}M</div>
+          <div className={styles.kpiValue} style={{ color: "#a855f7" }}>${(totalRev / 1e6).toFixed(1)}M</div>
           <div className={styles.kpiSub}>Across 6 major platforms</div>
         </div>
         <div className={styles.kpiCard}>
           <div className={styles.kpiLabel}>TOTAL DAILY ACTIVE USERS</div>
-          <div className={styles.kpiValue} style={{ color: "#06b6d4" }}>{globalDau.toFixed(1)}B</div>
+          <div className={styles.kpiValue} style={{ color: "#00f0ff" }}>{globalDau.toFixed(1)}B</div>
           <div className={styles.kpiSub}>Combined audience</div>
         </div>
         <div className={styles.kpiCard}>
           <div className={styles.kpiLabel}>AVG CPM ACROSS PLATFORMS</div>
-          <div className={styles.kpiValue} style={{ color: "#8b5cf6" }}>${avgCpm.toFixed(2)}</div>
+          <div className={styles.kpiValue} style={{ color: "#d946ef" }}>${avgCpm.toFixed(2)}</div>
           <div className={styles.kpiSub}>Per 1,000 impressions</div>
         </div>
         <div className={styles.kpiCard}>
           <div className={styles.kpiLabel}>AVG DAILY SESSION</div>
-          <div className={styles.kpiValue} style={{ color: "#10b981" }}>{Math.round(avgSession)} min</div>
+          <div className={styles.kpiValue} style={{ color: "#a855f7" }}>{Math.round(avgSession)} min</div>
           <div className={styles.kpiSub}>Attention captured</div>
         </div>
       </section>
 
-      {/* MAIN CONTENT */}
+      {/* MAIN LAYOUT (100% FULL-SCREEN FEEL) */}
       <main className={styles.mainLayout}>
         <div className={styles.leftPane}>
           {/* REVENUE BARS */}
           <div className={styles.card}>
             <div className={styles.cardHeader}>
               <div className={styles.cardTitle}>Daily Revenue by Platform</div>
-              <div className={styles.cardSub}>Estimated daily ad revenue based on DAU × session × CPM × ad load</div>
+              <div className={styles.cardSub}>Click a data layer row to toggle the custom Intelligence Slide-over Panel</div>
             </div>
             <div className={styles.barList}>
               {PLATFORMS.map((p, i) => {
                 const hrs = (p.dau * 1000000 * p.session) / 60;
                 const imps = hrs * p.adLoad;
                 const rev = (imps / 1000) * p.cpm;
-                // find max for scaling
                 const maxRev = Math.max(...PLATFORMS.map(px => ((px.dau * 1000000 * px.session) / 60) * px.adLoad / 1000 * px.cpm));
                 const widthPct = (rev / maxRev) * 100;
                 
                 return (
-                  <div key={p.id} className={styles.barRow} style={{ animationDelay: `${i * 0.1}s` }}>
+                  <div 
+                    key={p.id} 
+                    className={`${styles.barRow} ${selectedId === p.id ? styles.activeRow : ""}`} 
+                    style={{ animationDelay: `${i * 0.1}s`, cursor: "pointer" }}
+                    onClick={() => handlePlatformSelect(p.id)}
+                  >
                     <div className={styles.barMeta}>
                       <div className={styles.barIcon}>{p.icon}</div>
                       <div className={styles.barName}>{p.name}</div>
@@ -163,13 +185,13 @@ export default function AttentionEconomyDashboard() {
             </div>
           </div>
 
-          {/* SIMULATOR */}
+          {/* SIMULATOR ENGINE */}
           <div className={styles.simPanel}>
             <div className={styles.simHeader}>
-              <div className={styles.simIcon}>🎛️</div>
+              <div className={styles.simIcon} style={{ color: activePlatform.color }}>🎛️</div>
               <div>
-                <div className={styles.simTitle}>Revenue Engine Simulator: {activePlatform.name}</div>
-                <div className={styles.simSub}>Adjust the levers of the attention economy to see the financial impact.</div>
+                <div className={styles.simTitle}>Dynamic Intelligence Core: {activePlatform.name}</div>
+                <div className={styles.simSub}>Adjust the platform variables below to see real-time revenue adjustments.</div>
               </div>
             </div>
 
@@ -227,11 +249,11 @@ export default function AttentionEconomyDashboard() {
               </div>
               <div className={styles.resultCard}>
                 <div className={styles.resultLabel}>Daily Revenue</div>
-                <div className={styles.resultValue} style={{ color: "#10b981" }}>${(simDailyRev / 1e6).toFixed(1)}M</div>
+                <div className={styles.resultValue} style={{ color: "#a855f7" }}>${(simDailyRev / 1e6).toFixed(1)}M</div>
               </div>
               <div className={styles.resultCard}>
                 <div className={styles.resultLabel}>Annual Run Rate</div>
-                <div className={styles.resultValue} style={{ color: "#3b82f6" }}>${((simDailyRev * 365) / 1e9).toFixed(2)}B</div>
+                <div className={styles.resultValue} style={{ color: "#00f0ff" }}>${((simDailyRev * 365) / 1e9).toFixed(2)}B</div>
               </div>
             </div>
 
@@ -248,19 +270,19 @@ export default function AttentionEconomyDashboard() {
             </div>
           </div>
           
-          {/* PLATFORM CARDS */}
+          {/* PLATFORM CARDS GRID */}
           <div className={styles.card}>
             <div className={styles.cardHeader}>
-              <div className={styles.cardTitle}>Platform Intelligence</div>
-              <div className={styles.cardSub}>Select a platform to load its metrics into the simulator.</div>
+              <div className={styles.cardTitle}>Platform Matrix Matrix</div>
+              <div className={styles.cardSub}>Clicking any card automatically triggers the intelligence slider panel overlay.</div>
             </div>
             <div className={styles.platformGrid}>
               {PLATFORMS.map((p) => (
                 <div 
                   key={p.id} 
                   className={`${styles.platformCard} ${selectedId === p.id ? styles.platformCardSelected : ""}`}
-                  style={{ "--accent": p.color } as any}
-                  onClick={() => setSelectedId(p.id)}
+                  style={{ "--accent": p.color, cursor: "pointer" } as any}
+                  onClick={() => handlePlatformSelect(p.id)}
                 >
                   <div className={styles.pcHeader}>
                     <div className={styles.pcIcon}>{p.icon}</div>
@@ -291,15 +313,32 @@ export default function AttentionEconomyDashboard() {
               ))}
             </div>
           </div>
-
         </div>
+      </main>
 
-        <div className={styles.rightPane}>
-          {/* ATTENTION VALUE INDEX */}
+      {/* SLIDE-OVER OVERLAY LAYER */}
+      <div 
+        className={`${styles.slideOverOverlay} ${panelOpen ? styles.active : ""}`}
+        onClick={() => setPanelOpen(false)}
+      ></div>
+
+      {/* SLIDE-OVER INTELLIGENCE PANEL */}
+      <div className={`${styles.slideOverPanel} ${panelOpen ? styles.active : ""}`}>
+        <div className={styles.slideOverHeader}>
+          <div className={styles.slideOverTitle}>📊 Layer Insights: {activePlatform.name}</div>
+          <button 
+            className={styles.slideOverClose}
+            onClick={() => setPanelOpen(false)}
+            style={{ background: "transparent", border: "none", color: "#fff", fontSize: "18px", cursor: "pointer" }}
+          >
+            ✕
+          </button>
+        </div>
+        <div className={styles.slideOverContent}>
           <div className={styles.card}>
             <div className={styles.cardHeader}>
               <div className={styles.cardTitle}>Attention Value Index</div>
-              <div className={styles.cardSub}>Revenue generated per user per minute</div>
+              <div className={styles.cardSub}>Global comparative sorting</div>
             </div>
             <div className={styles.attentionTable}>
               <div className={styles.attTableHeader}>
@@ -322,18 +361,17 @@ export default function AttentionEconomyDashboard() {
             </div>
           </div>
 
-          {/* CPM BY VERTICAL */}
           <div className={styles.card}>
             <div className={styles.cardHeader}>
               <div className={styles.cardTitle}>CPM by Ad Vertical</div>
-              <div className={styles.cardSub}>Industry average ranges</div>
+              <div className={styles.cardSub}>Market average spectrum</div>
             </div>
             <div className={styles.cpmList}>
               {VERTICAL_CPMS.map((v, i) => (
                 <div key={i} className={styles.cpmRow}>
                   <div className={styles.cpmVertical}>{v.label}</div>
                   <div className={styles.cpmBar}>
-                    <div className={styles.cpmFill} style={{ backgroundColor: "#3b82f6", "--bar-width": `${(v.value / 60) * 100}%` } as any}></div>
+                    <div className={styles.cpmFill} style={{ backgroundColor: "#a855f7", "--bar-width": `${(v.value / 60) * 100}%` } as any}></div>
                   </div>
                   <div className={styles.cpmVal}>${v.value}</div>
                 </div>
@@ -341,28 +379,60 @@ export default function AttentionEconomyDashboard() {
             </div>
           </div>
 
-          {/* INSIGHTS */}
           <div className={styles.insightPanel}>
-            <div className={styles.insightTitle}><span className={styles.insightIcon}>💡</span> Why This Matters</div>
+            <div className={styles.insightTitle}><span className={styles.insightIcon}>💡</span> Structural Metrics</div>
             <div className={styles.insightList}>
               <div className={styles.insightItem}>
                 <div className={styles.insightEmoji}>📉</div>
                 <div>
                   <div className={styles.insightItemTitle}>The Ad Load Ceiling</div>
-                  <div className={styles.insightItemBody}>Platforms cannot infinitely increase ad load without severely damaging user retention.</div>
+                  <div className={styles.insightItemBody}>Retention degradation occurs if values break past critical bounds.</div>
                 </div>
               </div>
               <div className={styles.insightItem}>
                 <div className={styles.insightEmoji}>⏱️</div>
                 <div>
                   <div className={styles.insightItemTitle}>Session Dominance</div>
-                  <div className={styles.insightItemBody}>TikTok offsets lower CPMs entirely through massive session lengths (95+ minutes).</div>
+                  <div className={styles.insightItemBody}>{activePlatform.name} targets optimizing attention capturing to amplify gross run rates.</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </main>
+      </div>
+
+      {/* METADATA DEVELOPER SIGNATURE MODAL */}
+      <div 
+        className={`${styles.infoModal} ${infoOpen ? styles.active : ""}`}
+        onClick={() => setInfoOpen(false)}
+      >
+        <div 
+          className={styles.infoModalContent}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button 
+            className={styles.infoModalClose}
+            onClick={() => setInfoOpen(false)}
+          >
+            ✕
+          </button>
+          <div className={styles.infoModalTitle}>Architect Verification Signature</div>
+          <div className={styles.infoModalMeta}>
+            <div className={styles.infoModalRow}>
+              <div className={styles.infoModalLabel}>Lead Architect</div>
+              <div className={styles.infoModalValue} style={{ color: "#00f0ff", fontWeight: "bold" }}>Jaliha Sherin K J</div>
+            </div>
+            <div className={styles.infoModalRow}>
+              <div className={styles.infoModalLabel}>Batch</div>
+              <div className={styles.infoModalValue}>Batch 2 Interns</div>
+            </div>
+            <div className={styles.infoModalRow}>
+              <div className={styles.infoModalLabel}>Framework Stack</div>
+              <div className={styles.infoModalValue}>Next.js, FastAPI, Tailwind CSS, Custom Canvas Engine</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
